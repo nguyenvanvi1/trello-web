@@ -8,6 +8,13 @@ import Recent from './Menus/Recent'
 import Starred from './Menus/Starred'
 import Templates from './Menus/Templates'
 import Button from '@mui/material/Button'
+import TextField from '@mui/material/TextField';
+import Badge from '@mui/material/Badge';
+import Tooltip from '@mui/material/Tooltip';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+
+import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
+import Profiles from './Menus/Profiles'
 function AppBar() {
   return (
     <Box px={2} sx={{
@@ -30,8 +37,20 @@ function AppBar() {
         <Templates/>
         <Button variant="outlined">Create</Button>
       </Box>
-      <Box>
+      <Box sx={{display:'flex',alignItems:'center',gap:2}}>
+      <TextField id="outlined-search" label="Search..." type="search" size='small' />
         Mode
+        <Tooltip title='Notification'>
+          <Badge color="secondary" variant="dot" sx={{cursor:'pointer'}}>
+            <NotificationsNoneIcon/>
+          </Badge>
+        </Tooltip>
+        <Tooltip title='Help'>
+          <Badge color="secondary" variant="dot" sx={{cursor:'pointer'}}>
+            <HelpOutlineIcon/>
+          </Badge>
+        </Tooltip>
+        <Profiles/>
       </Box>
     </Box>
   )
