@@ -8,20 +8,6 @@ const theme = extendTheme({
     appBarHeight:'58px',
     boardBarHeight:'60px'
   },
-  colorSchemes: {
-    light: {
-      palette: {
-        primary: teal,
-        secondary:deepOrange
-      }
-    },
-    dark: {
-      palette: {
-        primary: cyan,
-        secondary:orange
-      }
-    }
-  },
   components: {
     MuiCssBaseline:{
       styleOverrides:{
@@ -31,11 +17,11 @@ const theme = extendTheme({
             height:'8px'
           },
           '*::-webkit-scrollbar-thumb': {
-            backgroundColor:'red',
+            backgroundColor:'#dcdde1',
             borderRadius:'8px'
           },
           '*::-webkit-scrollbar-thumb:hover': {
-            backgroundColor:'blue',
+            backgroundColor:'white',
             borderRadius:'8px'
           }
         }
@@ -45,18 +31,17 @@ const theme = extendTheme({
     MuiButton: {
       styleOverrides: {
         // Name of the slot
-        root:({theme})=>({
-          color:theme.palette.primary.main,
-          fontSize:'0.875rem'
-        })
+        root:{
+          textTransform:'none',
+          borderWidth:'0.5px'
+        }
       },
     },
     MuiInputLabel: {
       styleOverrides: {
         // Name of the slot
         root: {
-          // Some CSS
-          textTransform : 'none'
+          fontSize:'0.875rem'
         },
       },
     },
@@ -65,7 +50,6 @@ const theme = extendTheme({
         // Name of the slot
         root:({theme})=>{
           return {
-            color:theme.palette.primary.main,
             fontSize:'0.875rem',
             '.MuiOutlinedInput-notchedOutline':{
               borderColor:theme.palette.primary.light
@@ -76,7 +60,7 @@ const theme = extendTheme({
               }
             },
             '& fieldset': {
-              borderWidth: '1px !important'
+              borderWidth: '0.5px !important'
             }
           }
         }

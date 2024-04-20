@@ -9,7 +9,6 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 function BoardBar() {
   return (
     <Box sx={{
-      backgroundColor:'primary.dark',
       width:'100%',
       height:(theme) => theme.trello.boardHeight,
       display:'flex',
@@ -17,7 +16,8 @@ function BoardBar() {
       justifyContent:'space-between',
       gap:2,
       overflowX:'auto',
-      borderTop:'1px solid #00bfa5'
+      bgcolor:(theme )=>(theme.palette.mode ==='dark'?'#34495e':'#1976d2'),
+      borderBottom:'1px solid white'
     }}>
       <Box sx={{ display:'flex', alignItems:'center', gap:2 }}>
         <Chip sx={{
@@ -102,14 +102,20 @@ function BoardBar() {
         />
       </Box>
       <Box sx={{ display:'flex', alignItems:'center', gap:2 }}>
-      <Button variant="outlined" startIcon={<PersonAddIcon/>}>Invite</Button>
+      <Button 
+      variant="outlined" 
+      startIcon={<PersonAddIcon/>}
+      sx={{color:'white',borderColor:'white','&:hover':{borderColor:'white'}}}
+      >Invite</Button>
 
         <AvatarGroup max={3}
         sx={{
+          gap:'10px',
           '& .MuiAvatar-root':{
-            widt:34,
+            width:34,
             height:34,
-            fontSize:16
+            fontSize:16,
+            border:'none'
           }
         }}
         >
