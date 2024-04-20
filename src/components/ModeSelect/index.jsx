@@ -29,12 +29,12 @@ function ModeSelect() {
             </div>
         </MenuItem>
         <MenuItem value='dark'>
-            <div style={{ display:'flex', alignItems:'center' }}>
+            <div style={{ display:'flex', alignItems:'center',gap:'8px' }}>
             <DarkModeIcon fontSize='small'/>Dark
             </div>
         </MenuItem>
         <MenuItem value='system'>           
-            <div style={{ display:'flex', alignItems:'center' }}>
+            <div style={{ display:'flex', alignItems:'center',gap:'8px' }}>
             <SettingsBrightnessIcon fontSize='small'/>  System
             </div>
         </MenuItem>
