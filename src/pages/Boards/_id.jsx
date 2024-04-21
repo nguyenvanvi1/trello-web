@@ -1,8 +1,9 @@
 import React from 'react'
 import { Box, Container} from '@mui/material'
-import AppBar from '../../components/AppBar'
-import BoardBar from './BoardBar'
-import BoardContent from './BoardContent'
+import BoardContent from './BoardContent/BoardContent'
+import BoardBar from './BoardBar/BoardBar'
+import AppBar from '~/components/AppBar/AppBar'
+
 function Board() {
   return (
     <>

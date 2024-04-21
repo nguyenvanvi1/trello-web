@@ -18,7 +18,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import InputAdornment from '@mui/material/InputAdornment';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import Profiles from './Menus/Profiles'
-import ModeSelect from '../ModeSelect'
+import ModeSelect from '../ModeSelect/ModeSelect'
+
 function AppBar() {
   const [searchValue,setSearchValue] = useState('')
   return (
