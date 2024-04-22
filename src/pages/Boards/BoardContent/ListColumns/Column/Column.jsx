@@ -16,8 +16,9 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import AddCardIcon from '@mui/icons-material/AddCard'
 import DragHandleIcon from '@mui/icons-material/DragHandle'
 import ListCards from './ListCards/ListCards'
-
-function Column() {
+import { mapOrder } from '~/utils/sorts'
+function Column({column}) {
+  const orderedCards = mapOrder(column?.cards,column?.cardOrderIds,'_id')
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
   const handleClick = (event) => {
@@ -46,7 +47,7 @@ function Column() {
         <Typography variant='h6' sx={{
           fontWeight:'1rem',
           cursor:'pointer'
-        }}>Column Title</Typography>
+        }}>{column?.title}</Typography>
         <Box>
           <Tooltip title="More options">
             <ExpandMoreIcon
@@ -109,7 +110,7 @@ function Column() {
           </Menu>
         </Box>
       </Box>
-      <ListCards/>
+      <ListCards cards={orderedCards}/>
       <Box sx={{
         height:(theme)=> theme.trello.columnFooterHeight,
         p:2,

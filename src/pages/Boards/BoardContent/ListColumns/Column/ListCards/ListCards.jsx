@@ -11,7 +11,7 @@ import Button from '@mui/material/Button'
 import TrelloCard from './Card/TrelloCard'
 
 
-function ListCards() {
+function ListCards({cards}) {
   return (
     <Box sx={{
       p:'0 5px',
@@ -35,7 +35,9 @@ function ListCards() {
         backgroundColor:'#bfc2cf'
       }
     }}>
-    <TrelloCard/>
+    {
+      cards.map(card=> <TrelloCard key={card._id} card={card}/>)
+    }
     </Box>
   )
 }

@@ -6,7 +6,9 @@ import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import AvatarGroup from '@mui/material/AvatarGroup'
 import PersonAddIcon from '@mui/icons-material/PersonAdd'
-function BoardBar() {
+import { capitalizeFirstLetter } from '~/utils/formatters'
+function BoardBar({board}) {
+
   return (
     <Box sx={{
       width:'100%',
@@ -33,7 +35,7 @@ function BoardBar() {
           }
         }}
         icon={<DashboardIcon/>}
-        label="NguyenVanVi FULL STACK"
+        label={board?.title}
         />
         <Chip sx={{
           color:'primary.main',
@@ -49,7 +51,7 @@ function BoardBar() {
           }
         }}
         icon={<DashboardIcon/>}
-        label="Public/Private Workspace"
+        label={capitalizeFirstLetter(board?.type)}
         />
         <Chip sx={{
           color:'primary.main',

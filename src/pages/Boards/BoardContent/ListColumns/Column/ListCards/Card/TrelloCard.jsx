@@ -9,31 +9,45 @@ import AttachmentIcon from '@mui/icons-material/Attachment'
 import { Box, Typography } from '@mui/material'
 import Button from '@mui/material/Button'
 
-function TrelloCard() {
+function TrelloCard({card}) {
+  const shouldShowCardActions = ()=>{
+    return !!card?.memberIds?.length || !!card?.memberIds?.length || !!card?.memberIds?.length
+  }
   return (
     <Card sx={{
       cursor:'pointer',
       boxShadow:'0 1px 1px rgba(0, 0, 0, 0.2)'
     }}>
+      {card?.cover && 
       <CardMedia
-        sx={{ height: 140 }}
-        image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT27iH4kG1h3RF37xccQY2iPYG4lJK-I6SDrw&usqp=CAU"
-        title="green iguana"
-      />
+      sx={{ height: 140 }}
+      image={card?.cover}
+    />
+      }
       <CardContent sx={{
         p:1.5, '&:last-child':{ p:1.5 }
       }}>
         <Typography>
-            Nguyen Van Vi
+            {card?.title}
         </Typography>
       </CardContent>
-      <CardActions sx={{
-        p:'0 4px 8px 4px'
-      }}>
-        <Button size="small" startIcon={<GroupIcon/>}>20</Button>
-        <Button size="small" startIcon={<ModeCommentIcon/>}>20</Button>
-        <Button size="small" startIcon={<AttachmentIcon/>}>20</Button>
-      </CardActions>
+      {
+        shouldShowCardActions() && 
+        <CardActions sx={{
+          p:'0 4px 8px 4px'
+        }}>
+          {
+            !!card?.memberIds?.length && <Button size="small" startIcon={<GroupIcon/>}>{card?.memberIds?.length}</Button>
+          }
+          {
+            !!card?.memberIds?.length && <Button size="small" startIcon={<ModeCommentIcon/>}>{card?.comments?.length}</Button>
+          }
+          {
+            !!card?.memberIds?.length && <Button size="small" startIcon={<AttachmentIcon/>}>{card?.attachments?.length}</Button>
+          }
+        </CardActions>
+      }
+      
     </Card>
   )
 }
