@@ -27,7 +27,8 @@ function Column({ column }) {
   })
 
   const dndKitColumnStyles = {
-    transform: CSS.Transform.toString(transform),
+    touchAction:'none',
+    transform: CSS.Translate.toString(transform),
     transition
   }
   const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
