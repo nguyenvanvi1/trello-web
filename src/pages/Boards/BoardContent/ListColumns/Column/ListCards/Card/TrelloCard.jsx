@@ -8,17 +8,35 @@ import ModeCommentIcon from '@mui/icons-material/ModeComment'
 import AttachmentIcon from '@mui/icons-material/Attachment'
 import { Box, Typography } from '@mui/material'
 import Button from '@mui/material/Button'
-
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 function TrelloCard({card}) {
+  const {
+    attributes, listeners, setNodeRef, transform, transition,isDragging } = useSortable({
+    id: card._id,
+    data:{ ...card }
+  })
+
+  const dndKitCardStyles = {
+    touchAction:'none',
+    transform: CSS.Translate.toString(transform),
+    transition,
+    opacity:isDragging ? 0.5 :undefined
+  }
   const shouldShowCardActions = ()=>{
     return !!card?.memberIds?.length || !!card?.memberIds?.length || !!card?.memberIds?.length
   }
   return (
-    <Card sx={{
+    <Card
+    ref={setNodeRef}
+      style = {dndKitCardStyles}
+      {...attributes}
+      {...listeners}
+    sx={{
       cursor:'pointer',
       boxShadow:'0 1px 1px rgba(0, 0, 0, 0.2)'
     }}>
-      {card?.cover && 
+      {card?.cover &&
       <CardMedia
       sx={{ height: 140 }}
       image={card?.cover}
@@ -32,7 +50,7 @@ function TrelloCard({card}) {
         </Typography>
       </CardContent>
       {
-        shouldShowCardActions() && 
+        shouldShowCardActions() &&
         <CardActions sx={{
           p:'0 4px 8px 4px'
         }}>
@@ -47,7 +65,7 @@ function TrelloCard({card}) {
           }
         </CardActions>
       }
-      
+
     </Card>
   )
 }
