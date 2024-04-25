@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Box, Typography } from '@mui/material'
 import ListColumns from './ListColumns/ListColumns'
 import { mapOrder } from '~/utils/sorts'
-import { DndContext,PointerSensor,useSensor,useSensors,MouseSensor,TouchSensor,DragOverlay, defaultDropAnimationSideEffects } from '@dnd-kit/core'
+import { DndContext,PointerSensor,useSensor,useSensors,MouseSensor,TouchSensor,DragOverlay, defaultDropAnimationSideEffects, closestCorners } from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
 import Column from './ListColumns/Column/Column'
 import TrelloCard from './ListColumns/Column/ListCards/Card/TrelloCard'
@@ -95,7 +95,7 @@ function BoardContent({ board }) {
   }
   return (
 
-    <DndContext onDragEnd={handleDragEnd} onDragOver={handleDragOver} sensors={sensors} onDragStart={handleDragStart}>
+    <DndContext onDragEnd={handleDragEnd} onDragOver={handleDragOver} sensors={sensors} collisionDetection={closestCorners} onDragStart={handleDragStart}>
       <Box sx={{
         bgcolor:(theme ) => (theme.palette.mode ==='dark'?'#34495e':'#1976d2'),
         width:'100%',
