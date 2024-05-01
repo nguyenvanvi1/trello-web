@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Box, Typography } from '@mui/material'
 import ListColumns from './ListColumns/ListColumns'
 import { mapOrder } from '~/utils/sorts'
-import { DndContext,PointerSensor,useSensor,useSensors,MouseSensor,TouchSensor,DragOverlay, defaultDropAnimationSideEffects, closestCorners } from '@dnd-kit/core'
+import { DndContext,PointerSensor,useSensor,useSensors,MouseSensor,TouchSensor,DragOverlay, defaultDropAnimationSideEffects, closestCorners, pointerWithin, rectIntersection, getFirstCollision, closestCenter } from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
 import Column from './ListColumns/Column/Column'
 import TrelloCard from './ListColumns/Column/ListCards/Card/TrelloCard'
-import { cloneDeep } from 'lodash'
+import { cloneDeep, over } from 'lodash'
 const ACTIVE_DRAG_ITEM_TYPE = {
   COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',
   CARD:'ACTIVE_DRAG_ITEM_TYPE_CARD'
@@ -21,6 +21,7 @@ function BoardContent({ board }) {
   const [activeDragItemType,setActiveDragItemType] = useState(null)
   const [activeDragItemData,setActiveDragItemData] = useState(null)
   const [oldColumnWhenDraggingCard,setOldColumnWhenDraggingCard] = useState(null)
+  const lastOverId = useRef(null)
   useEffect(() => {
     const orderedColumns = mapOrder(board?.columns, board?.columnOrderIds, '_id')
     setOrderedColumns(orderedColumns)
@@ -147,9 +148,39 @@ function BoardContent({ board }) {
       }
     })
   }
+  const collisionDetectionStrantegy = useCallback((args)=>{
+    if(activeDragItemType  === ACTIVE_DRAG_ITEM_TYPE.COLUMN) {
+      return closestCorners({...args})
+    } 
+    // thuat toan phat hien va cham
+    const pointerIntersection = pointerWithin(args)
+    const intersection = pointerIntersection?.length > 0
+    ? pointerIntersection : rectIntersection(args)
+    let overId = getFirstCollision(intersection,'id')
+    if(overId) {
+      const checkColumn = orderedColumns.find(column =>column._id ===overId)
+      if(checkColumn) {
+        overId = closestCenter({
+          ...args,
+          droppableContainers: args.droppableContainers.filter(container =>{
+            return container.id !== overId &&  checkColumn?.cardOrderIds?.includes(container.id)
+          })
+        })[0]?.id
+      }
+      lastOverId.current = overId
+      return [{id:overId}]
+    }
+    return lastOverId.current ? [{id:lastOverId.current}] : []
+  },[activeDragItemType,orderedColumns])
   return (
 
-    <DndContext onDragEnd={handleDragEnd} onDragOver={handleDragOver} sensors={sensors} collisionDetection={closestCorners} onDragStart={handleDragStart}>
+    <DndContext onDragEnd={handleDragEnd}
+     onDragOver={handleDragOver}
+      sensors={sensors}
+      //  collisionDetection={closestCorners}
+       collisionDetection={collisionDetectionStrantegy}
+
+        onDragStart={handleDragStart}>
       <Box sx={{
         bgcolor:(theme ) => (theme.palette.mode ==='dark'?'#34495e':'#1976d2'),
         width:'100%',
