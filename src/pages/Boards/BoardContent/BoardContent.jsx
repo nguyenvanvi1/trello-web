@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Box, Typography } from '@mui/material'
 import ListColumns from './ListColumns/ListColumns'
 import { mapOrder } from '~/utils/sorts'
-import { DndContext,PointerSensor,useSensor,useSensors,MouseSensor,TouchSensor,DragOverlay, defaultDropAnimationSideEffects, closestCorners, pointerWithin, rectIntersection, getFirstCollision, closestCenter } from '@dnd-kit/core'
+import { DndContext,PointerSensor,useSensor,useSensors,MouseSensor,TouchSensor,DragOverlay, defaultDropAnimationSideEffects, closestCorners, pointerWithin, getFirstCollision, closestCenter } from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
 import Column from './ListColumns/Column/Column'
 import TrelloCard from './ListColumns/Column/ListCards/Card/TrelloCard'
@@ -154,9 +154,10 @@ function BoardContent({ board }) {
     } 
     // thuat toan phat hien va cham
     const pointerIntersection = pointerWithin(args)
-    const intersection = pointerIntersection?.length > 0
-    ? pointerIntersection : rectIntersection(args)
-    let overId = getFirstCollision(intersection,'id')
+    if (!pointerIntersection?.length) return
+    // const intersection = pointerIntersection?.length
+    // ? pointerIntersection : rectIntersection(args)
+    let overId = getFirstCollision(pointerIntersection,'id')
     if(overId) {
       const checkColumn = orderedColumns.find(column =>column._id ===overId)
       if(checkColumn) {
