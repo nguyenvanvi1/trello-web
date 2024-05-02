@@ -6,7 +6,8 @@ import { DndContext,PointerSensor,useSensor,useSensors,MouseSensor,TouchSensor,D
 import { arrayMove } from '@dnd-kit/sortable'
 import Column from './ListColumns/Column/Column'
 import TrelloCard from './ListColumns/Column/ListCards/Card/TrelloCard'
-import { cloneDeep, over } from 'lodash'
+import { cloneDeep, isEmpty, over } from 'lodash'
+import { generatePlaceholder } from '~/utils/formatters'
 const ACTIVE_DRAG_ITEM_TYPE = {
   COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',
   CARD:'ACTIVE_DRAG_ITEM_TYPE_CARD'
@@ -52,6 +53,9 @@ function BoardContent({ board }) {
       const nextOverColumn = nextColumns.find(column=>column._id === overColumn._id)
       if(nextActiveColumn) {
         nextActiveColumn.cards = nextActiveColumn.cards.filter(card=>card._id !== activeDraggingCardId)
+        if(isEmpty(nextActiveColumn.cards)) {
+          nextActiveColumn.cards = [generatePlaceholder(nextActiveColumn)]
+        }
         nextActiveColumn.cardOrderIds = nextActiveColumn.cards.map(car=>car._id)
       }
       if(nextOverColumn) {
@@ -61,6 +65,7 @@ function BoardContent({ board }) {
           columnId:nextOverColumn._id
         }
         nextOverColumn.cards = nextOverColumn.cards.toSpliced(newCardIndex,0,rebuild_activeDraggingCardData)
+        nextOverColumn.cards = nextOverColumn.cards.filter(card=>!card.FE_PlaceholderCard)
         nextOverColumn.cardOrderIds = nextOverColumn.cards.map(car=>car._id)
       }
       return nextColumns
