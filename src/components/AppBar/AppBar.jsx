@@ -21,7 +21,7 @@ import Profiles from './Menus/Profiles'
 import ModeSelect from '../ModeSelect/ModeSelect'
 
 function AppBar() {
-  const [searchValue,setSearchValue] = useState('')
+  const [searchValue, setSearchValue] = useState('')
   return (
     <Box px={2} sx={{
       backgroundColor:'primary.light',
@@ -34,21 +34,21 @@ function AppBar() {
       overflowX:'auto',
       bgcolor:(theme )=>(theme.palette.mode ==='dark'?'#2c3e50':'#1565c0')
     }}>
-      <Box sx={{display:'flex',alignItems:'center',gap:2}}>
+      <Box sx={{display:'flex', alignItems:'center', gap:2}}>
         <AppsIcon sx={{color: 'white' }}/>
-        <Box sx={{display:'flex',alignItems:'center',gap:0.5}}>
+        <Box sx={{display:'flex', alignItems:'center', gap:0.5}}>
           <SvgIcon component={TrelloIcon} inheritViewBox sx={{color: 'white' }} />
           <Typography variant='span' sx={{fontSize:'1.2rem', fontWeight:'bold', color:'white'}}>Trello</Typography>
         </Box>
-        <Box sx={{display:{xs:'none',md:'flex'},gap:1}}>
+        <Box sx={{display:{xs:'none', md:'flex'}, gap:1}}>
           <Workspaces/>
           <Recent/>
           <Starred/>
           <Templates/>
         </Box>
-        <Button sx={{color:'white',border:'none'}} variant="outlined">Create</Button>
+        <Button sx={{color:'white', border:'none'}} variant="outlined">Create</Button>
       </Box>
-      <Box sx={{display:'flex',alignItems:'center',gap:2}}>
+      <Box sx={{display:'flex', alignItems:'center', gap:2}}>
         <TextField 
         id="outlined-search" 
         label="Search..." 
@@ -63,10 +63,13 @@ function AppBar() {
           </InputAdornment>
           ),
           endAdornment:(
-            <CloseIcon 
-              fontSize='small' sx={{color:searchValue ?'white':'transparent',cursor:'pointer'}}
+            <InputAdornment position="end">
+              <CloseIcon 
+              fontSize='small' sx={{color:searchValue ?'white':'transparent', cursor:'pointer'}}
               onClick ={()=>setSearchValue('')}
             />
+            </InputAdornment>
+            
           )
         }}
         sx={{
