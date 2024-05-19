@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Box, Button, Typography } from '@mui/material'
 import Column from './Column/Column'
+import {toast} from 'react-toastify'
 import TextField from '@mui/material/TextField';
 import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add'
@@ -11,7 +12,7 @@ function ListColumns({ columns }) {
   const [newColumnTitle,setNewColumnTitle] = useState('')
   const addNewColumn = ()=>{
     if(!newColumnTitle) {
-      console.error('loi')
+      toast.error('loi')
       return
     }
     console.log(newColumnTitle)
@@ -63,6 +64,7 @@ function ListColumns({ columns }) {
               size='small'
               variant="outlined"
               autoFocus
+              data-no-dnd="true"
               value={newColumnTitle}
               onChange={(e)=>setNewColumnTitle(e.target.value)}
               sx={{

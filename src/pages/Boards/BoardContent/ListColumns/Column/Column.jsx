@@ -20,6 +20,7 @@ import { mapOrder } from '~/utils/sorts'
 import { useSortable } from '@dnd-kit/sortable'
 import CloseIcon from '@mui/icons-material/Close';
 import { CSS } from '@dnd-kit/utilities'
+import {toast} from 'react-toastify'
 import TextField from '@mui/material/TextField';
 function Column({ column }) {
   const {
@@ -41,7 +42,7 @@ function Column({ column }) {
   const [newCardTitle, setNewCardTitle] = useState('')
   const addNewCard = () => {
     if (!newCardTitle) {
-      console.error('loi')
+      toast.error('loi',{position:'bottom-right'})
       return
     }
     console.log(newCardTitle)
@@ -177,13 +178,17 @@ function Column({ column }) {
                   size='small'
                   variant="outlined"
                   autoFocus
+                  data-no-dnd="true"
                   value={newCardTitle}
                   onChange={(e)=>setNewCardTitle(e.target.value)}
                   sx={{
                     '& label':{ color:'text.primary' },
                     '& input':{
                       color:(theme)=>theme.palette.primary.main,
-                      bgcolor:(theme)=>theme.palette.mode === 'dark'? '#333643':'white'
+                      bgcolor:(theme)=>theme.palette.mode === 'dark'? '#333643':'white',
+                      '-webkit-user-select': 'auto',
+                      'user-select': 'auto',
+                      '-webkit-user-drag': 'none'
                     },
                     '& label.Mui-focused':{ color:(theme)=>theme.palette.primary.main },
                     '& .MuiOutlinedInput-root':{
