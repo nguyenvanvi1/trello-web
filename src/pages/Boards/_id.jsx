@@ -3,7 +3,7 @@ import { Box, Container} from '@mui/material'
 import BoardContent from './BoardContent/BoardContent'
 import BoardBar from './BoardBar/BoardBar'
 import AppBar from '~/components/AppBar/AppBar'
-import { fetchBoardDetailsAPI,createNewCardAPI,createNewColumnAPI } from '~/apis'
+import { fetchBoardDetailsAPI,createNewCardAPI,createNewColumnAPI,updateBoardDetailsAPI } from '~/apis'
 import { generatePlaceholder } from '~/utils/formatters'
 import { isEmpty } from 'lodash'
 function Board() {
@@ -47,6 +47,15 @@ function Board() {
     }
     setBoard(newBoard)
   }
+  const moveColumns = async(dndorderedColumns)=>{
+    const dndorderedColumnsIds = dndorderedColumns.map(c=>c._id)
+    const newBoard = {...board}
+    newBoard.columns = dndorderedColumns
+    newBoard.columnOrderIds= dndorderedColumnsIds
+    setBoard(newBoard)
+    // goi api update board
+    await updateBoardDetailsAPI(newBoard._id,{columnOrderIds:newBoard.columnOrderIds})
+  }
   return (
     <>
       <Container disableGutters maxWidth={false} sx={{ height:'100vh', backgroundColor:'primary.main' }}>
@@ -55,6 +64,7 @@ function Board() {
         <BoardContent board = {board}
          createNewColumn={createNewColumn}
          createNewCard = {createNewCard}
+         moveColumns={moveColumns}
          />
       </Container>
     </>
