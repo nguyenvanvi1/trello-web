@@ -13,7 +13,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',
   CARD:'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
-function BoardContent({ board,createNewColumn,createNewCard,moveColumns}) {
+function BoardContent({ board,createNewColumn,createNewCard,moveColumns,moveCardInTheSameColumn}) {
   const pointerSensor = useSensor(PointerSensor, {activationConstraint: {distance:10}})
   const mouseSensor = useSensor(MouseSensor, {activationConstraint: {distance:10}})
   const touchSensor = useSensor(TouchSensor, {activationConstraint: {delay:250,tolerance:5}})
@@ -25,8 +25,7 @@ function BoardContent({ board,createNewColumn,createNewCard,moveColumns}) {
   const [oldColumnWhenDraggingCard,setOldColumnWhenDraggingCard] = useState(null)
   const lastOverId = useRef(null)
   useEffect(() => {
-    const orderedColumns = mapOrder(board?.columns, board?.columnOrderIds, '_id')
-    setOrderedColumns(orderedColumns)
+    setOrderedColumns(board.columns)
   }, [board])
   const findColumnByCardId = (cardId)=>{
     return orderedColumns.find(column=>column.cards.map(card=>card._id)?.includes(cardId))
@@ -120,13 +119,15 @@ function BoardContent({ board,createNewColumn,createNewCard,moveColumns}) {
         const oldCardIndex = oldColumnWhenDraggingCard?.cards?.findIndex(c => c._id ===activeDragItemId)
         const newCardIndex = overColumn?.cards?.findIndex( c => c._id === overCardId)
         const dndorderedCards = arrayMove(oldColumnWhenDraggingCard?.cards, oldCardIndex, newCardIndex)
+        const dndOrderedCardIds = dndorderedCards.map(car=>car._id)
         setOrderedColumns(prevColumns=>{
           const nextColumns =cloneDeep(prevColumns)
           const targetColumn = nextColumns.find(c=>c._id === overColumn._id)
           targetColumn.cards = dndorderedCards
-          targetColumn.cardOrderIds = dndorderedCards.map(car=>car._id)
+          targetColumn.cardOrderIds = dndOrderedCardIds
           return nextColumns
         })
+        moveCardInTheSameColumn(dndorderedCards,dndOrderedCardIds,oldColumnWhenDraggingCard._id)
       }
     }
     if (activeDragItemType ==ACTIVE_DRAG_ITEM_TYPE.COLUMN) {
@@ -134,9 +135,10 @@ function BoardContent({ board,createNewColumn,createNewCard,moveColumns}) {
         const oldColumnIndex = orderedColumns.findIndex(c => c._id ===active.id)
         const newColumnIndex = orderedColumns.findIndex( c => c._id === over.id)
         const dndorderedColumns = arrayMove(orderedColumns, oldColumnIndex, newColumnIndex)
+        setOrderedColumns(dndorderedColumns)
         moveColumns(dndorderedColumns)
         //const dndorderedColumnsIds = dndorderedColumns.map(c=>c._id) 
-        setOrderedColumns(dndorderedColumns)
+        
       }
     }
     // những dữ liệu sau khi kéo thả này luôn phải đưa về giá trị ban đầu

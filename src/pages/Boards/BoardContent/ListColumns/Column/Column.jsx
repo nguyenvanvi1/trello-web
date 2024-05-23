@@ -16,7 +16,6 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import AddCardIcon from '@mui/icons-material/AddCard'
 import DragHandleIcon from '@mui/icons-material/DragHandle'
 import ListCards from './ListCards/ListCards'
-import { mapOrder } from '~/utils/sorts'
 import { useSortable } from '@dnd-kit/sortable'
 import CloseIcon from '@mui/icons-material/Close';
 import { CSS } from '@dnd-kit/utilities'
@@ -36,11 +35,11 @@ function Column({ column ,createNewCard}) {
     height:'100%',
     opacity:isDragging? 0.5 : undefined
   }
-  const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
+  const orderedCards = column.cards
   const [openNewCardForm, setOpenNewCardForm] = useState(false)
   const toggleOpenNewCardForm = () => setOpenNewCardForm(!openNewCardForm)
   const [newCardTitle, setNewCardTitle] = useState('')
-  const addNewCard =  async () => {
+  const addNewCard = () => {
     if (!newCardTitle) {
       toast.error('loi',{position:'bottom-right'})
       return
@@ -49,7 +48,7 @@ function Column({ column ,createNewCard}) {
       title:newCardTitle,
       columnId:column._id
     }
-    await createNewCard(newCardData)
+  createNewCard(newCardData)
     // goi api o day
     toggleOpenNewCardForm()
     setNewCardTitle('')
