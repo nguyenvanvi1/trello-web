@@ -22,7 +22,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { CSS } from '@dnd-kit/utilities'
 import {toast} from 'react-toastify'
 import TextField from '@mui/material/TextField';
-function Column({ column }) {
+function Column({ column ,createNewCard}) {
   const {
     attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: column._id,
@@ -40,12 +40,16 @@ function Column({ column }) {
   const [openNewCardForm, setOpenNewCardForm] = useState(false)
   const toggleOpenNewCardForm = () => setOpenNewCardForm(!openNewCardForm)
   const [newCardTitle, setNewCardTitle] = useState('')
-  const addNewCard = () => {
+  const addNewCard =  async () => {
     if (!newCardTitle) {
       toast.error('loi',{position:'bottom-right'})
       return
     }
-    console.log(newCardTitle)
+    const newCardData ={
+      title:newCardTitle,
+      columnId:column._id
+    }
+    await createNewCard(newCardData)
     // goi api o day
     toggleOpenNewCardForm()
     setNewCardTitle('')

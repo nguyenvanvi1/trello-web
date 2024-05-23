@@ -3,22 +3,59 @@ import { Box, Container} from '@mui/material'
 import BoardContent from './BoardContent/BoardContent'
 import BoardBar from './BoardBar/BoardBar'
 import AppBar from '~/components/AppBar/AppBar'
-import { fetchBoardDetailsAPI } from '~/apis'
-import { mockData } from '~/apis/mock-data'
+import { fetchBoardDetailsAPI,createNewCardAPI,createNewColumnAPI } from '~/apis'
+import { generatePlaceholder } from '~/utils/formatters'
+import { isEmpty } from 'lodash'
 function Board() {
   const [board,setBoard] = useState(null)
   useEffect(()=>{
-    const boardId = '66479c87a6c2d28141b9306f'
+    const boardId = '664b331d5aab4fd791ded62a'
     fetchBoardDetailsAPI(boardId).then(board=>{
+      board.columns.forEach(column=>{
+        if(isEmpty(column.cards)) {
+          column.cards = [generatePlaceholder(column)]
+          column.cardOrderIds= [generatePlaceholder(column)._id]
+        }
+      })
       setBoard(board)
     })
   },[])
+  const createNewColumn = async (newColumData)=>{
+    const createdColumn = await createNewColumnAPI({
+      ...newColumData,
+      boardId : board._id
+    })
+    // cap nhat state board
+    createdColumn.cards = [generatePlaceholder(createdColumn)]
+    createdColumn.cardOrderIds = [generatePlaceholder(createdColumn)._id]
+    const newBoard = {...board}
+    newBoard.columns.push(createdColumn)
+    newBoard.columnOrderIds.push(createdColumn._id)
+    setBoard(newBoard)
+
+  }
+  const createNewCard = async (newCardData)=>{
+    const createdCard = await createNewCardAPI({
+      ...newCardData,
+      boardId : board._id
+    })
+    const newBoard = {...board}
+    const columnToUpdate = newBoard.columns.find(column=>column._id===createdCard.columnId)
+    if(columnToUpdate) {
+      columnToUpdate.cards.push(createdCard)
+      columnToUpdate.cardOrderIds.push(createdCard._id)
+    }
+    setBoard(newBoard)
+  }
   return (
     <>
       <Container disableGutters maxWidth={false} sx={{ height:'100vh', backgroundColor:'primary.main' }}>
         <AppBar/>
-        <BoardBar board = {mockData.board} />
-        <BoardContent board = {mockData.board}/>
+        <BoardBar board = {board} />
+        <BoardContent board = {board}
+         createNewColumn={createNewColumn}
+         createNewCard = {createNewCard}
+         />
       </Container>
     </>
   )
