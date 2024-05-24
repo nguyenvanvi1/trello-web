@@ -13,7 +13,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',
   CARD:'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
-function BoardContent({ board,createNewColumn,createNewCard,moveColumns,moveCardInTheSameColumn}) {
+function BoardContent({ board,createNewColumn,createNewCard,moveColumns,moveCardInTheSameColumn,moveCardToDifferentColumn}) {
   const pointerSensor = useSensor(PointerSensor, {activationConstraint: {distance:10}})
   const mouseSensor = useSensor(MouseSensor, {activationConstraint: {distance:10}})
   const touchSensor = useSensor(TouchSensor, {activationConstraint: {delay:250,tolerance:5}})
@@ -37,7 +37,8 @@ function BoardContent({ board,createNewColumn,createNewCard,moveColumns,moveCard
     over,
     activeColumn,
     activeDraggingCardId,
-    activeDraggingCardData
+    activeDraggingCardData,
+    triggerFrom
 
   )=>{
     setOrderedColumns(prevColumns=>{
@@ -68,6 +69,9 @@ function BoardContent({ board,createNewColumn,createNewCard,moveColumns,moveCard
         nextOverColumn.cards = nextOverColumn.cards.filter(card=>!card.FE_PlaceholderCard)
         nextOverColumn.cardOrderIds = nextOverColumn.cards.map(car=>car._id)
       }
+      if(triggerFrom === 'handleDragEnd') {
+        moveCardToDifferentColumn(activeDraggingCardId, oldColumnWhenDraggingCard._id, nextOverColumn._id, nextColumns)
+      }
       return nextColumns
     })
   }
@@ -94,7 +98,9 @@ function BoardContent({ board,createNewColumn,createNewCard,moveColumns,moveCard
         over,
         activeColumn,
         activeDraggingCardId,
-        activeDraggingCardData)
+        activeDraggingCardData,
+        'handleDragOver'
+      )
     }
   }
   const handleDragEnd = (event) => {
@@ -114,7 +120,9 @@ function BoardContent({ board,createNewColumn,createNewCard,moveColumns,moveCard
           over,
           activeColumn,
           activeDraggingCardId,
-          activeDraggingCardData)
+          activeDraggingCardData,
+          'handleDragEnd'
+        )
       }else{
         const oldCardIndex = oldColumnWhenDraggingCard?.cards?.findIndex(c => c._id ===activeDragItemId)
         const newCardIndex = overColumn?.cards?.findIndex( c => c._id === overCardId)
