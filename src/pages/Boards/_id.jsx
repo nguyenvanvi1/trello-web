@@ -3,11 +3,13 @@ import { Box, Container, Typography } from '@mui/material'
 import BoardContent from './BoardContent/BoardContent'
 import BoardBar from './BoardBar/BoardBar'
 import AppBar from '~/components/AppBar/AppBar'
-import { fetchBoardDetailsAPI, createNewCardAPI, createNewColumnAPI, updateBoardDetailsAPI, updateColumnDetailsAPI,moveCardToDifferentColumnAPI } from '~/apis'
+import { fetchBoardDetailsAPI, createNewCardAPI, createNewColumnAPI, updateBoardDetailsAPI, updateColumnDetailsAPI,moveCardToDifferentColumnAPI,deleteColumnDetailsAPI } from '~/apis'
 import { generatePlaceholder } from '~/utils/formatters'
 import { isEmpty } from 'lodash'
 import { mapOrder } from '~/utils/sorts'
 import CircularProgress from '@mui/material/CircularProgress'
+import {toast} from 'react-toastify'
+
 function Board() {
   const [board, setBoard] = useState(null)
   useEffect(() => {
@@ -98,6 +100,16 @@ function Board() {
       }
     )
   }
+  const deleteColumnDetails = ( columnId )=>{
+    const newBoard = { ...board }
+    newBoard.columns = newBoard.columns.filter(c=>c._id!==columnId)
+    newBoard.columnOrderIds= newBoard.columnOrderIds.filter( _id => _id  !==columnId)
+    setBoard(newBoard)
+    deleteColumnDetailsAPI(columnId).then(res=>{
+      toast.success(res?.deleteResult)
+      
+    })
+  }
   if (!board) {
     return (
       <Box sx={{
@@ -124,6 +136,7 @@ function Board() {
           moveColumns={moveColumns}
           moveCardInTheSameColumn = {moveCardInTheSameColumn}
           moveCardToDifferentColumn = {moveCardToDifferentColumn}
+          deleteColumnDetails = {deleteColumnDetails}
         />
       </Container>
     </>
